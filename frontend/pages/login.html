@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Log In — Volt Grid</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+
+<div class="auth-shell">
+  <div class="auth-visual">
+    <div class="grid-lines"></div>
+    <div class="visual-copy">
+      <div class="eyebrow"><span class="dot"></span>LIVE NETWORK · 20 STATIONS ONLINE</div>
+      <h1>Charge anywhere. Track everything.</h1>
+      <p>Find nearby stations, reserve a charger in seconds, and watch your battery fill up in real time — all from one dashboard.</p>
+    </div>
+  </div>
+
+  <div class="auth-form-side">
+    <div class="auth-card">
+      <div class="brand">
+        <div class="brand-mark">V</div>
+        <div class="brand-name">Volt Grid</div>
+      </div>
+
+      <h2>Welcome back</h2>
+      <div class="subtitle">Log in to manage your charging sessions.</div>
+
+      <form id="login-form">
+        <div class="field">
+          <label for="email">Email</label>
+          <input class="input" type="email" id="email" placeholder="you@example.com" required />
+        </div>
+        <div class="field">
+          <label for="password">Password</label>
+          <input class="input" type="password" id="password" placeholder="••••••••" required />
+        </div>
+
+        <div class="form-row">
+          <label class="checkbox-row">
+            <input type="checkbox" id="remember-me" />
+            Remember me
+          </label>
+          <a class="link-muted" href="#" onclick="showToast('Password reset link sent if the email exists.'); return false;">Forgot password?</a>
+        </div>
+
+        <button class="btn btn-primary" type="submit" id="login-btn">Log In</button>
+      </form>
+
+      <div class="divider-row">OR</div>
+
+      <button class="btn btn-secondary" type="button" onclick="showToast('Google login is a UI preview in this demo.')">
+        Continue with Google
+      </button>
+
+      <p style="text-align:center; margin-top:26px; font-size:13.5px; color:var(--text-1);">
+        Don't have an account? <a class="link-muted" href="/pages/register.html">Register</a>
+      </p>
+
+      <p style="text-align:center; margin-top:14px; font-size:12px; color:var(--text-2);">
+        Demo login: user1@example.com / password123
+      </p>
+    </div>
+  </div>
+</div>
+
+<script src="/js/api.js"></script>
+<script src="/js/login.js"></script>
+</body>
+</html>

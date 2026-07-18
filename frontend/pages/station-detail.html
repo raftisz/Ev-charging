@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Station Detail — Volt Grid</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+
+<div class="app-shell">
+  <div id="sidebar-root"></div>
+
+  <main class="main-area">
+    <div class="topbar">
+      <div>
+        <button class="menu-toggle" id="menu-toggle">☰</button>
+        <a class="link-muted" href="/pages/stations.html">← Back to stations</a>
+      </div>
+    </div>
+
+    <div id="station-content">
+      <div class="empty-state">Loading station details...</div>
+    </div>
+  </main>
+</div>
+
+<script src="/js/api.js"></script>
+<script src="/js/auth.js"></script>
+<script>
+  requireAuth();
+  renderSidebar("stations");
+
+  function getStationIdFromUrl() {
+    const params = new URLSearchParams(window.location.search);
+    return params.get("id");
+  }
+
+  function renderStationDetail(station) {
+    document.title = `${station.name} — Volt Grid`;
+
+    const chargerRows = station.chargers
+      .map(
+        (c) => `
+        <div class="history-row">
+          <div><div class="title">Charger ${c.charger_code}</div><div class="sub">${c.connector_type}</div></div>
+          <div>${c.power_kw} kW</div>
+          <div><span class="badge ${c.is_available ? "badge-green" : "badge-red"}">${c.is_available ? "Available" : "In Use"}</span></div>
+          <div></div>
+        </div>`
+      )
+      .join("");
+
+    document.getElementById("station-content").innerHTML = `
+      <div class="grid grid-2" style="align-items:start;">
+        <div>
+          <img src="${station.image_url}" alt="${station.name}" style="width:100%; border-radius:var(--radius-lg); margin-bottom:18px; height:280px; object-fit:cover;" />
+
+          <div class="glass-card" style="margin-bottom:18px;">
+            <div class="name-row" style="margin-bottom:10px;">
+              <h2>${station.name}</h2>
+              <span class="badge ${station.is_open ? "badge-green" : "badge-red"}">${station.is_open ? "Open" : "Closed"}</span>
+            </div>
+            <div class="text-muted" style="margin-bottom:14px;">${station.address}, ${station.city}</div>
+            <p class="text-muted" style="font-size:14px;">${station.description || ""}</p>
+
+            <div class="grid grid-3" style="margin-top:18px;">
+              <div class="stat-tile"><div class="stat-label">Price</div><div class="stat-value" style="font-size:20px;">฿${station.price_per_kwh.toFixed(2)}<small>/kWh</small></div></div>
+              <div class="stat-tile"><div class="stat-label">Rating</div><div class="stat-value" style="font-size:20px;">⭐ ${station.rating}</div></div>
+              <div class="stat-tile"><div class="stat-label">Hours</div><div class="stat-value" style="font-size:16px;">${station.opening_hours}</div></div>
+            </div>
+          </div>
+
+          <div class="glass-card">
+            <h3 style="margin-bottom:12px;">Location</h3>
+            <div class="map-placeholder">
+              <div class="pin"></div>
+              <span style="margin-left:10px;">Map preview unavailable in demo</span>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="glass-card" style="margin-bottom:18px;">
+            <h3 style="margin-bottom:12px;">Available Chargers</h3>
+            ${chargerRows || '<div class="empty-state">No chargers listed.</div>'}
+          </div>
+
+          <div class="glass-card" style="margin-bottom:18px;">
+            <h3 style="margin-bottom:10px;">Amenities</h3>
+            <div class="text-muted" style="font-size:14px;">${station.amenities}</div>
+          </div>
+
+          <div class="glass-card">
+            <h3 style="margin-bottom:10px;">Reviews</h3>
+            <div class="history-row">
+              <div><div class="title">Napat S.</div><div class="sub">2 days ago</div></div>
+              <div colspan="2" style="grid-column:span 2;">"Fast and reliable, great app experience."</div>
+              <div>⭐⭐⭐⭐⭐</div>
+            </div>
+            <div class="history-row">
+              <div><div class="title">Mint P.</div><div class="sub">1 week ago</div></div>
+              <div colspan="2" style="grid-column:span 2;">"Clean location, easy to find a free charger."</div>
+              <div>⭐⭐⭐⭐</div>
+            </div>
+          </div>
+
+          <a class="btn btn-primary" style="margin-top:18px;" href="/pages/reservation.html?station_id=${station.id}">Reserve This Station</a>
+        </div>
+      </div>`;
+  }
+
+  (async function init() {
+    const stationId = getStationIdFromUrl();
+    if (!stationId) {
+      window.location.href = "/pages/stations.html";
+      return;
+    }
+    try {
+      const station = await Api.get(`/stations/${stationId}`);
+      renderStationDetail(station);
+    } catch (err) {
+      showToast(err.message, true);
+    }
+  })();
+</script>
+</body>
+</html>

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>History — Volt Grid</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+
+<div class="app-shell">
+  <div id="sidebar-root"></div>
+
+  <main class="main-area">
+    <div class="topbar">
+      <div>
+        <button class="menu-toggle" id="menu-toggle">☰</button>
+        <div class="page-title">History</div>
+        <div class="page-sub">Review your past reservations, charging sessions, and payments.</div>
+      </div>
+    </div>
+
+    <div class="tabs" style="margin-bottom:20px;">
+      <button class="tab-btn active" data-tab="reservations">Reservations</button>
+      <button class="tab-btn" data-tab="charging">Charging</button>
+      <button class="tab-btn" data-tab="payments">Payments</button>
+    </div>
+
+    <div class="glass-card">
+      <div id="tab-reservations"></div>
+      <div id="tab-charging" style="display:none;"></div>
+      <div id="tab-payments" style="display:none;"></div>
+    </div>
+  </main>
+</div>
+
+<script src="/js/api.js"></script>
+<script src="/js/auth.js"></script>
+<script>
+  requireAuth();
+  renderSidebar("history");
+
+  document.querySelectorAll(".tab-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".tab-btn").forEach((b) => b.classList.remove("active"));
+      btn.classList.add("active");
+      ["reservations", "charging", "payments"].forEach((key) => {
+        document.getElementById(`tab-${key}`).style.display = key === btn.dataset.tab ? "block" : "none";
+      });
+    });
+  });
+
+  function emptyRow(text) {
+    return `<div class="empty-state">${text}</div>`;
+  }
+
+  async function loadReservations() {
+    const bookings = await Api.get("/bookings");
+    const container = document.getElementById("tab-reservations");
+    if (bookings.length === 0) return (container.innerHTML = emptyRow("No reservations yet."));
+
+    container.innerHTML = bookings
+      .map(
+        (b) => `
+        <div class="history-row">
+          <div><div class="title">Station #${b.station_id}</div><div class="sub">${b.reservation_date} · ${b.reservation_time}</div></div>
+          <div>Charger #${b.charger_id}</div>
+          <div><span class="badge ${b.status === "confirmed" ? "badge-blue" : b.status === "completed" ? "badge-green" : "badge-red"}">${b.status}</span></div>
+          <div style="text-align:right; font-weight:600;">฿${b.estimated_cost.toFixed(2)}</div>
+        </div>`
+      )
+      .join("");
+  }
+
+  async function loadPayments() {
+    const payments = await Api.get("/payments");
+    const container = document.getElementById("tab-payments");
+    if (payments.length === 0) return (container.innerHTML = emptyRow("No payments yet."));
+
+    container.innerHTML = payments
+      .map(
+        (p) => `
+        <div class="history-row">
+          <div><div class="title">Payment #${p.id}</div><div class="sub">${new Date(p.created_at).toLocaleString()}</div></div>
+          <div>${p.method.replace("_", " ")}</div>
+          <div><span class="badge badge-green">${p.status}</span></div>
+          <div style="text-align:right; font-weight:600;">฿${p.amount.toFixed(2)}</div>
+        </div>`
+      )
+      .join("");
+  }
+
+  async function loadChargingHistory() {
+    // Derived from payments tied to completed bookings, since each
+    // completed session results in exactly one payment in this demo.
+    const payments = await Api.get("/payments");
+    const container = document.getElementById("tab-charging");
+    if (payments.length === 0) return (container.innerHTML = emptyRow("No charging sessions yet."));
+
+    container.innerHTML = payments
+      .map(
+        (p) => `
+        <div class="history-row">
+          <div><div class="title">Session tied to Booking #${p.booking_id ?? "—"}</div><div class="sub">${new Date(p.created_at).toLocaleDateString()}</div></div>
+          <div>Fast Charge</div>
+          <div><span class="badge badge-green">Completed</span></div>
+          <div style="text-align:right; font-weight:600;">฿${p.amount.toFixed(2)}</div>
+        </div>`
+      )
+      .join("");
+  }
+
+  (async function init() {
+    try {
+      await Promise.all([loadReservations(), loadPayments(), loadChargingHistory()]);
+    } catch (err) {
+      showToast(err.message, true);
+    }
+  })();
+</script>
+</body>
+</html>

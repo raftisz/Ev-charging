@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Reserve a Charger — Volt Grid</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+
+<div class="app-shell">
+  <div id="sidebar-root"></div>
+
+  <main class="main-area">
+    <div class="topbar">
+      <div>
+        <button class="menu-toggle" id="menu-toggle">☰</button>
+        <div class="page-title">Reserve a Charging Slot</div>
+        <div class="page-sub" id="station-name-sub">Choose your preferred date, time, and charger.</div>
+      </div>
+    </div>
+
+    <div class="grid grid-2" style="align-items:start;">
+      <div class="glass-card">
+        <form id="reservation-form">
+          <div class="field">
+            <label for="date">Select Date</label>
+            <input class="input" type="date" id="date" required />
+          </div>
+          <div class="field">
+            <label for="time">Select Time</label>
+            <input class="input" type="time" id="time" required />
+          </div>
+          <div class="field">
+            <label for="charger">Select Charger</label>
+            <select class="input" id="charger" required></select>
+          </div>
+          <div class="field">
+            <label for="vehicle">Vehicle</label>
+            <select class="input" id="vehicle"></select>
+          </div>
+          <button class="btn btn-primary" type="submit" id="confirm-btn">Confirm Reservation</button>
+        </form>
+      </div>
+
+      <div class="glass-card">
+        <h3 style="margin-bottom:16px;">Reservation Summary</h3>
+        <div id="summary-body">
+          <div class="empty-state">Select a station from the stations page to begin.</div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script src="/js/api.js"></script>
+<script src="/js/auth.js"></script>
+<script src="/js/reservation.js"></script>
+</body>
+</html>

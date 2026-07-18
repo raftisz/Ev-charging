@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Dashboard — Volt Grid</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+
+<div class="app-shell">
+  <div id="sidebar-root"></div>
+
+  <main class="main-area">
+    <div class="topbar">
+      <div>
+        <button class="menu-toggle" id="menu-toggle">☰</button>
+        <div class="page-title" id="greeting">Welcome back</div>
+        <div class="page-sub">Here's what's happening with your EV today.</div>
+      </div>
+      <a class="btn btn-primary" style="width:auto;" href="/pages/stations.html">+ New Reservation</a>
+    </div>
+
+    <div class="grid grid-3" style="margin-bottom:18px;">
+      <div class="glass-card stat-tile">
+        <div class="stat-label">Wallet Balance</div>
+        <div class="stat-value" id="stat-wallet">฿0.00</div>
+      </div>
+      <div class="glass-card stat-tile">
+        <div class="stat-label">Reward Points</div>
+        <div class="stat-value" id="stat-points">0 <small>pts</small></div>
+      </div>
+      <div class="glass-card stat-tile">
+        <div class="stat-label">Sessions This Month</div>
+        <div class="stat-value" id="stat-sessions">0</div>
+      </div>
+    </div>
+
+    <div class="grid grid-2" style="align-items:start;">
+      <div class="glass-card">
+        <h3 style="margin-bottom:16px;">Current Battery</h3>
+        <div class="charge-ring-wrap" style="margin-bottom:10px;">
+          <div class="charge-ring">
+            <svg width="180" height="180" viewBox="0 0 180 180">
+              <defs>
+                <linearGradient id="ringGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#2fe6a0" />
+                  <stop offset="100%" stop-color="#3fa9ff" />
+                </linearGradient>
+              </defs>
+              <circle class="ring-track" cx="90" cy="90" r="78" stroke-width="14" fill="none" />
+              <circle id="ring-progress" class="ring-progress" cx="90" cy="90" r="78" stroke-width="14" fill="none"
+                stroke-dasharray="490" stroke-dashoffset="490" />
+            </svg>
+          </div>
+          <div class="charge-ring-center">
+            <div class="pct" id="battery-pct">--%</div>
+            <div class="label" id="battery-status">No active session</div>
+          </div>
+        </div>
+        <a href="/pages/charging-status.html" class="btn btn-outline btn-block">View Charging Status</a>
+      </div>
+
+      <div class="glass-card">
+        <h3 style="margin-bottom:16px;">Current Reservation</h3>
+        <div id="current-reservation">
+          <div class="empty-state">
+            <div class="icon">📅</div>
+            No upcoming reservation yet.
+            <div style="margin-top:14px;"><a class="btn btn-primary" style="width:auto; display:inline-flex;" href="/pages/stations.html">Reserve a Charger</a></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid grid-2" style="margin-top:18px; align-items:start;">
+      <div class="glass-card">
+        <h3 style="margin-bottom:14px;">Favorite Stations</h3>
+        <div id="favorite-stations" class="grid grid-2"></div>
+      </div>
+
+      <div class="glass-card">
+        <h3 style="margin-bottom:6px;">Recent Charging History</h3>
+        <div id="recent-history"></div>
+        <a href="/pages/history.html" class="link-muted" style="display:inline-block; margin-top:12px;">View full history →</a>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script src="/js/api.js"></script>
+<script src="/js/auth.js"></script>
+<script src="/js/dashboard.js"></script>
+</body>
+</html>

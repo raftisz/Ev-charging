@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Payment — Volt Grid</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+
+<div class="app-shell">
+  <div id="sidebar-root"></div>
+
+  <main class="main-area">
+    <div class="topbar">
+      <div>
+        <button class="menu-toggle" id="menu-toggle">☰</button>
+        <div class="page-title">Payment</div>
+        <div class="page-sub">Choose how you'd like to pay for your session.</div>
+      </div>
+    </div>
+
+    <div class="grid grid-2" style="align-items:start;">
+      <div class="glass-card">
+        <h3 style="margin-bottom:16px;">Payment Method</h3>
+        <div id="pay-methods" style="display:flex; flex-direction:column; gap:12px;">
+          <label class="pay-method selected" data-method="credit_card">
+            <input type="radio" name="method" value="credit_card" checked />
+            <div>
+              <div style="font-weight:600;">Credit / Debit Card</div>
+              <div class="text-dim" style="font-size:12.5px;">Visa, Mastercard, JCB</div>
+            </div>
+          </label>
+          <label class="pay-method" data-method="promptpay">
+            <input type="radio" name="method" value="promptpay" />
+            <div>
+              <div style="font-weight:600;">PromptPay QR</div>
+              <div class="text-dim" style="font-size:12.5px;">Scan with your banking app</div>
+            </div>
+          </label>
+          <label class="pay-method" data-method="wallet">
+            <input type="radio" name="method" value="wallet" />
+            <div>
+              <div style="font-weight:600;">Volt Grid Wallet</div>
+              <div class="text-dim" style="font-size:12.5px;" id="wallet-balance-label">Balance: ฿0.00</div>
+            </div>
+          </label>
+        </div>
+
+        <div id="card-fields" style="margin-top:20px;">
+          <div class="field">
+            <label>Card Number</label>
+            <input class="input" placeholder="4242 4242 4242 4242" />
+          </div>
+          <div class="grid grid-2">
+            <div class="field"><label>Expiry</label><input class="input" placeholder="MM/YY" /></div>
+            <div class="field"><label>CVC</label><input class="input" placeholder="123" /></div>
+          </div>
+        </div>
+
+        <div id="promptpay-fields" style="display:none; margin-top:20px; text-align:center;">
+          <div class="map-placeholder" style="height:180px; width:180px; margin:0 auto;">QR Code</div>
+          <div class="text-dim" style="font-size:12px; margin-top:10px;">Scan using any Thai banking app</div>
+        </div>
+      </div>
+
+      <div class="glass-card">
+        <h3 style="margin-bottom:16px;">Payment Summary</h3>
+        <div class="glass-panel">
+          <div class="history-row" style="grid-template-columns:1fr auto;">
+            <div class="text-muted">Session Cost</div><div id="summary-amount">฿0.00</div>
+          </div>
+          <div class="history-row" style="grid-template-columns:1fr auto;">
+            <div class="text-muted">Service Fee</div><div>฿0.00</div>
+          </div>
+          <div class="history-row" style="grid-template-columns:1fr auto; border-bottom:none;">
+            <div style="font-weight:600;">Total</div><div style="font-weight:700; color:var(--green);" id="summary-total">฿0.00</div>
+          </div>
+        </div>
+        <button class="btn btn-primary" style="margin-top:20px;" id="confirm-payment-btn">Confirm Payment</button>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script src="/js/api.js"></script>
+<script src="/js/auth.js"></script>
+<script src="/js/payment.js"></script>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Find Stations — Volt Grid</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+
+<div class="app-shell">
+  <div id="sidebar-root"></div>
+
+  <main class="main-area">
+    <div class="topbar">
+      <div>
+        <button class="menu-toggle" id="menu-toggle">☰</button>
+        <div class="page-title">Find Charging Stations</div>
+        <div class="page-sub" id="results-count">Loading stations...</div>
+      </div>
+    </div>
+
+    <div class="glass-card" style="margin-bottom:20px; display:flex; gap:14px; flex-wrap:wrap; align-items:center;">
+      <input class="input" style="flex:2; min-width:200px;" id="search-input" placeholder="Search by station name..." />
+
+      <select class="input" style="flex:1; min-width:160px;" id="sort-select">
+        <option value="distance">Sort: Nearest</option>
+        <option value="price">Sort: Lowest Price</option>
+        <option value="rating">Sort: Highest Rated</option>
+      </select>
+
+      <label class="checkbox-row" style="flex-shrink:0;">
+        <input type="checkbox" id="fast-charge-filter" />
+        Fast charge only
+      </label>
+    </div>
+
+    <div id="station-grid" class="grid grid-3"></div>
+  </main>
+</div>
+
+<script src="/js/api.js"></script>
+<script src="/js/auth.js"></script>
+<script src="/js/stations.js"></script>
+</body>
+</html>

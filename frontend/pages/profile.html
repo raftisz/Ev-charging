@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Profile — Volt Grid</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+
+<div class="app-shell">
+  <div id="sidebar-root"></div>
+
+  <main class="main-area">
+    <div class="topbar">
+      <div>
+        <button class="menu-toggle" id="menu-toggle">☰</button>
+        <div class="page-title">Profile</div>
+        <div class="page-sub">Manage your personal and vehicle information.</div>
+      </div>
+    </div>
+
+    <div class="grid grid-2" style="align-items:start;">
+      <div class="glass-card">
+        <div style="display:flex; align-items:center; gap:16px; margin-bottom:22px;">
+          <img id="profile-avatar" class="avatar" style="width:64px; height:64px;" src="" alt="Avatar" />
+          <div>
+            <div style="font-weight:600; font-size:16px;" id="profile-name">—</div>
+            <div class="text-dim" style="font-size:13px;" id="profile-email">—</div>
+          </div>
+        </div>
+
+        <form id="profile-form">
+          <div class="field">
+            <label for="full_name">Full Name</label>
+            <input class="input" id="full_name" required />
+          </div>
+          <div class="field">
+            <label for="phone">Phone</label>
+            <input class="input" id="phone" />
+          </div>
+
+          <div class="field" style="display:flex; align-items:center; justify-content:space-between;">
+            <label style="margin:0;">Dark Mode</label>
+            <label class="checkbox-row"><input type="checkbox" id="dark_mode" checked /> Enabled</label>
+          </div>
+          <div class="field" style="display:flex; align-items:center; justify-content:space-between;">
+            <label style="margin:0;">Notifications</label>
+            <label class="checkbox-row"><input type="checkbox" id="notifications" checked /> Enabled</label>
+          </div>
+
+          <button class="btn btn-primary" type="submit" id="save-profile-btn">Save Changes</button>
+        </form>
+
+        <button class="btn btn-danger btn-block" style="margin-top:12px;" onclick="logout()">Log Out</button>
+      </div>
+
+      <div class="glass-card">
+        <h3 style="margin-bottom:16px;">Vehicle Information</h3>
+        <div id="vehicle-list" style="margin-bottom:20px;"></div>
+
+        <h4 style="margin-bottom:12px;">Add a Vehicle</h4>
+        <form id="vehicle-form">
+          <div class="grid grid-2">
+            <div class="field"><label>Make</label><input class="input" id="v_make" required /></div>
+            <div class="field"><label>Model</label><input class="input" id="v_model" required /></div>
+          </div>
+          <div class="grid grid-2">
+            <div class="field"><label>Year</label><input class="input" type="number" id="v_year" min="2000" max="2030" /></div>
+            <div class="field"><label>License Plate</label><input class="input" id="v_plate" /></div>
+          </div>
+          <button class="btn btn-secondary" type="submit">Add Vehicle</button>
+        </form>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script src="/js/api.js"></script>
+<script src="/js/auth.js"></script>
+<script src="/js/profile.js"></script>
+</body>
+</html>
