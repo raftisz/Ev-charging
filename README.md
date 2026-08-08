@@ -29,15 +29,15 @@ project-name/
 │   │   └── crud.py            # CRUD + auth helpers (hashing, JWT)
 │   ├── requirements.txt
 │   └── Dockerfile
-├── frontend/
+├── docs/
+│   ├── api-spec.md
+│   ├── docker-compose.yml
+│   ├── er-diagram.png
+│   ├── user-journey.md
 │   ├── index.html
 │   ├── pages/                 # login, register, dashboard, stations, ...
 │   ├── css/style.css
 │   └── js/                    # api.js, auth.js, and one file per page
-├── docs/
-│   ├── user-journey.md
-│   ├── er-diagram.png
-│   └── api-spec.md
 ├── docker-compose.yml
 ├── .env.example
 ├── .gitignore
@@ -64,7 +64,7 @@ docker compose up --build
 
 This starts two containers:
 - **db** — PostgreSQL 16, with a persisted volume
-- **backend** — FastAPI app, serving both the REST API and the static frontend
+- **backend** — FastAPI app, serving both the REST API and the static frontend from `docs/`
 
 Once both containers report healthy, open:
 - **App:** http://localhost:8000
@@ -95,9 +95,9 @@ pip install -r requirements.txt
 export DATABASE_URL=postgresql://ev_user:ev_password@localhost:5432/ev_charging_db
 uvicorn app.main:app --reload
 ```
-You'll need a local PostgreSQL instance matching `DATABASE_URL`, and the
-`frontend` folder copied/symlinked to `backend/frontend` (or adjust the
-static mount path in `app/main.py`) since Docker normally handles that copy.
+You'll need a local PostgreSQL instance matching `DATABASE_URL`. The
+`docs` folder must be available at the project root so `app/main.py` can
+mount it as the static frontend source when running without Docker.
 
 ## API Overview
 
@@ -116,13 +116,12 @@ Key routes:
 | POST | `/api/charging/stop` | Stop a session |
 | POST/GET | `/api/payments` | Pay / list payment history |
 
-All endpoints except register/login require a Bearer JWT.
+All endpoints except register/login require a valid JWT Authorization header.
 
 ## Authentication
 
 - Passwords are hashed with bcrypt (`passlib`).
-- Sessions use signed JWTs (`python-jose`), stored in `localStorage` on
-  the frontend and sent as `Authorization: Bearer <token>`.
+The frontend sends a valid JWT in the `Authorization` header on protected API requests.
 - Unauthenticated requests to protected pages redirect to `login.html`.
 
 ## Notes for graders

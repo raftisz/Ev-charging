@@ -3,7 +3,7 @@
 Base URL (local Docker): `http://localhost:8000/api`
 
 All endpoints return JSON. Protected endpoints require an
-`Authorization: Bearer <token>` header, where `<token>` is the JWT
+`Authorization: Bearer <token>` header, where `<token>` is the JWT returned from `/register` or `/login`.
 returned from `/register` or `/login`.
 
 ---

@@ -20,6 +20,7 @@ class User(SQLModel, table=True):
     avatar_url: Optional[str] = None
     wallet_balance: float = Field(default=0.0)
     reward_points: int = Field(default=0)
+    role: str = Field(default="user")
     dark_mode: bool = Field(default=True)
     notifications_enabled: bool = Field(default=True)
     created_at: datetime = Field(default_factory=datetime.utcnow)

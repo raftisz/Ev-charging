@@ -1,4 +1,4 @@
-FROM python:3.11-slim
+FROM python:3.12-slim
 
 WORKDIR /app
 
@@ -12,8 +12,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY backend/app ./app
 # Build context is the project root (see docker-compose.yml) so the
-# frontend folder can be copied in and served directly from /app/frontend
-COPY frontend ./frontend
+# static site can be copied in and served directly from /app/docs
+COPY docs ./docs
 
 EXPOSE 8000
 

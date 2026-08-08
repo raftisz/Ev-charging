@@ -6,10 +6,10 @@ Uses SQLModel (built on SQLAlchemy + Pydantic) with PostgreSQL.
 import os
 from sqlmodel import SQLModel, Session, create_engine
 
-DATABASE_URL = os.getenv(
-    "DATABASE_URL",
-    "postgresql://ev_user:ev_password@localhost:5432/ev_charging_db",
-)
+DATABASE_URL = os.getenv("DATABASE_URL")
+if not DATABASE_URL:
+    # Fallback to SQLite for local development when PostgreSQL is unavailable.
+    DATABASE_URL = "sqlite:///./ev_charging_db.sqlite"
 
 # `pool_pre_ping` avoids stale connections when the DB container restarts.
 engine = create_engine(DATABASE_URL, echo=False, pool_pre_ping=True)

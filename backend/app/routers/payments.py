@@ -28,3 +28,15 @@ def list_payments(
     session: Session = Depends(get_session),
 ):
     return crud.get_payments_by_user(session, current_user.id)
+
+
+@router.get("/payments/{payment_id}", response_model=schemas.PaymentResponse)
+def get_payment(
+    payment_id: int,
+    current_user: models.User = Depends(get_current_user),
+    session: Session = Depends(get_session),
+):
+    payment = crud.get_payment_by_id(session, payment_id)
+    if not payment or payment.user_id != current_user.id:
+        raise HTTPException(status_code=404, detail="Payment not found")
+    return payment

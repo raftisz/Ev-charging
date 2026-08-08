@@ -59,3 +59,8 @@ def login(data: schemas.LoginRequest, session: Session = Depends(get_session)):
 
     token = crud.create_access_token(user.id, remember_me=data.remember_me)
     return schemas.TokenResponse(access_token=token, user_id=user.id, full_name=user.full_name)
+
+
+@router.post("/logout")
+def logout(current_user: models.User = Depends(get_current_user)):
+    return {"detail": "Successfully logged out"}

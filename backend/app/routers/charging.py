@@ -58,3 +58,26 @@ def stop_charging(
         raise HTTPException(status_code=400, detail="No active charging session to stop")
 
     return crud.stop_charging_session(session, charging_session)
+
+
+@router.get("/charging/status/{booking_id}", response_model=schemas.ChargingSessionResponse)
+def charging_status_for_booking(
+    booking_id: int,
+    current_user: models.User = Depends(get_current_user),
+    session: Session = Depends(get_session),
+):
+    booking = crud.get_booking_by_id(session, booking_id)
+    if not booking or booking.user_id != current_user.id:
+        raise HTTPException(status_code=404, detail="Booking not found")
+    charging_session = crud.get_charging_session_by_booking(session, booking_id)
+    if not charging_session:
+        raise HTTPException(status_code=404, detail="No charging session found for this booking")
+    return charging_session
+
+
+@router.get("/charging/history", response_model=list[schemas.ChargingSessionResponse])
+def charging_history(
+    current_user: models.User = Depends(get_current_user),
+    session: Session = Depends(get_session),
+):
+    return crud.get_charging_history_for_user(session, current_user.id)

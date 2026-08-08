@@ -51,3 +51,29 @@ def get_booking(
     if not booking or booking.user_id != current_user.id:
         raise HTTPException(status_code=404, detail="Booking not found")
     return booking
+
+
+@router.put("/bookings/{booking_id}", response_model=schemas.BookingResponse)
+def update_booking(
+    booking_id: int,
+    data: schemas.BookingUpdateRequest,
+    current_user: models.User = Depends(get_current_user),
+    session: Session = Depends(get_session),
+):
+    booking = crud.get_booking_by_id(session, booking_id)
+    if not booking or booking.user_id != current_user.id:
+        raise HTTPException(status_code=404, detail="Booking not found")
+    return crud.update_booking(session, booking, data.model_dump(exclude_unset=True))
+
+
+@router.delete("/bookings/{booking_id}", status_code=204)
+def delete_booking(
+    booking_id: int,
+    current_user: models.User = Depends(get_current_user),
+    session: Session = Depends(get_session),
+):
+    booking = crud.get_booking_by_id(session, booking_id)
+    if not booking or booking.user_id != current_user.id:
+        raise HTTPException(status_code=404, detail="Booking not found")
+    crud.delete_booking(session, booking)
+    return None
